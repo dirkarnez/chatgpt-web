@@ -16,8 +16,6 @@
 	<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
 	
 	<script>
-		const API = "";
-
 		if (!ReadableStream.prototype[Symbol.asyncIterator]) {
 			ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
 				const reader = this.getReader();
@@ -46,7 +44,7 @@
 				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 				headers: {
 					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${API}`,
+					'Authorization': `Bearer ${Cookies.get(window.key)}`,
 				},
 				body: JSON.stringify({
 					// model:"text-chat-davinci-002-20230126",
