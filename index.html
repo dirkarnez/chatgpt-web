@@ -1,16 +1,46 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css" type="text/css">
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 	<script src="https://github.com/dirkarnez/webpack-umd-action/releases/download/eventsource-parser.0.1.0/eventsource-parser.0.1.0.min.js"></script>
 	<script>
 		window.key = "OPENAI";
 	</script>
+	<style>
+		.my-container {
+		    -webkit-box-sizing: border-box;
+		       -moz-box-sizing: border-box;
+			    box-sizing: border-box;
+		}
+
+		textarea {
+		  width: 100%;
+		  height: 100%;
+		      -webkit-box-sizing: border-box;
+		       -moz-box-sizing: border-box;
+			    box-sizing: border-box;
+		}
+		.my-container {
+		  width: 100%;
+		  height: 800px;
+		}
+	<style>
 </head>
 
 <body>
-	<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
+	<div class="row my-container">
+		<textarea id="ask-textarea"></textarea>
+		<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
+	</div>
+
+
+
 	
 	<script>
 		if (!ReadableStream.prototype[Symbol.asyncIterator]) {
