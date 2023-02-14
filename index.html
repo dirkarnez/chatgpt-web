@@ -35,7 +35,7 @@
 			let counter = 0;
 			const res = fetch("https://api.openai.com/v1/completions", {
 				method: 'POST', // *GET, POST, PUT, DELETE, etc.
-				//cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+				cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 				headers: {
 					'Content-Type': 'application/json',
 					'Authorization': `Bearer ${API}`,
