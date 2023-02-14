@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script
+		src="https://github.com/dirkarnez/webpack-umd-action/releases/download/eventsource-parser.0.1.0/eventsource-parser.0.1.0.min.js"></script>
+</head>
+
+<body>
+	<script>
+		const API = "";
+
+		if (!ReadableStream.prototype[Symbol.asyncIterator]) {
+			ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
+				const reader = this.getReader();
+				try {
+					while (true) {
+						const { done, value } = await reader.read();
+						if (done) {
+							return;
+						}
+						yield value;
+					}
+				}
+				finally {
+					reader.releaseLock();
+				}
+			}
+		}
+
+		async function OpenAIStream() {
+			const encoder = new TextEncoder();
+			const decoder = new TextDecoder();
+
+			let counter = 0;
+			const res = fetch("https://api.openai.com/v1/completions", {
+				method: 'POST', // *GET, POST, PUT, DELETE, etc.
+				//cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${API}`,
+				},
+				body: JSON.stringify({
+					// model:"text-chat-davinci-002-20230126",
+					// model:"text-chat-davinci-003",
+
+					model: "text-davinci-003",
+					// model:"text-curie-001",
+					prompt: "what is the difference between fourier transform and laplace transform?",
+					temperature: 0.7,
+					top_p: 1,
+					frequency_penalty: 0,
+					presence_penalty: 0,
+					max_tokens: 500,
+					stream: true,
+					n: 1,
+				}) // body data type must match "Content-Type" header
+			});
+
+			const stream = new ReadableStream({
+				async start(controller) {
+					// callback
+					function onParse(event) {
+						if (event.type === "event") {
+							const data = event.data;
+							// https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream
+							if (data === "[DONE]") {
+								controller.close();
+								return;
+							}
+							try {
+								const json = JSON.parse(data);
+								const text = json.choices[0].text;
+								if (counter < 2 && (text.match(/\n/) || []).length) {
+									// this is a prefix character (i.e., "\n\n"), do nothing
+									return;
+								}
+								const queue = encoder.encode(text);
+								controller.enqueue(queue);
+								counter++;
+							} catch (e) {
+								// maybe parse error
+								controller.error(e);
+							}
+						}
+					}
+
+					// stream response (SSE) from OpenAI may be fragmented into multiple chunks
+					// this ensures we properly read chunks and invoke an event for each SSE event stream
+					const parser = window.eventsourceParser.createParser(onParse);
+					// https://web.dev/streams/#asynchronous-iteration
+
+					res.then(async r => {
+						for await (const chunk of r.body) {
+							parser.feed(decoder.decode(chunk));
+						}
+					})
+				},
+			});
+
+			return new Response(stream);
+		}
+
+		OpenAIStream().then(async response => {
+			const data = response.body;
+			if (!data) {
+
+			}
+			const decoder = new TextDecoder();
+
+			for await (const chunk of data) {
+				console.log(decoder.decode(chunk));
+			}
+		});
+	</script>
+</body>
+
+</html>
