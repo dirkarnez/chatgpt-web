@@ -2,11 +2,19 @@
 <html>
 
 <head>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+	<script type="module"
+	src="https://cdn.jsdelivr.net/gh/dirkarnez/githubjs-wrapper@main/githubjs-wrapper.js"></script>
+	<script>
+		window.key = "OPENAI";
+	</script>
 	<script
 		src="https://github.com/dirkarnez/webpack-umd-action/releases/download/eventsource-parser.0.1.0/eventsource-parser.0.1.0.min.js"></script>
 </head>
 
 <body>
+	<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
+	
 	<script>
 		const API = "";
 
@@ -112,6 +120,7 @@
 				console.log(decoder.decode(chunk));
 			}
 		});
+		document.getElementById("key").value = Cookies.get(window.key) || "";
 	</script>
 </body>
 
