@@ -20,23 +20,25 @@
 		}
 
 		textarea {
-		  width: 100%;
-		  height: 100%;
-		      -webkit-box-sizing: border-box;
-		       -moz-box-sizing: border-box;
-			    box-sizing: border-box;
+			width: 100%;
+			-webkit-box-sizing: border-box;
+				-moz-box-sizing: border-box;
+				    box-sizing: border-box;
 		}
 		.my-container {
-		  width: 100%;
-		  height: 800px;
+			padding: 10px;
 		}
 	</style>
 </head>
 
 <body>
 	<div class="row my-container">
-		<textarea id="ask-textarea"></textarea>
-		<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
+		<div style="width: 100%;">		
+			<textarea id="ask-textarea"></textarea>
+			<button onclick="handleClick()">Ask</button><br>
+			<div id="ans">
+			<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
+		</div>
 	</div>
 
 
@@ -134,17 +136,22 @@
 			return new Response(stream);
 		}
 
-		OpenAIStream().then(async response => {
-			const data = response.body;
-			if (!data) {
+		function handleClick() {
+			document.getElementById("ans").innerText = "";
+			
+			OpenAIStream().then(async response => {
+				const data = response.body;
+				if (!data) {
 
-			}
-			const decoder = new TextDecoder();
+				}
+				const decoder = new TextDecoder();
 
-			for await (const chunk of data) {
-				console.log(decoder.decode(chunk));
-			}
-		});
+				for await (const chunk of data) {
+					document.getElementById("ans").innerText += decoder.decode(chunk);
+				}
+			});
+		}
+		
 		document.getElementById("key").value = Cookies.get(window.key) || "";
 	</script>
 </body>
