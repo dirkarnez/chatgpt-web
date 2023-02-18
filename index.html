@@ -202,7 +202,7 @@
 				const decoder = new TextDecoder();
 
 				for await (const chunk of data) {
-					document.getElementById("ans").textContent += decoder.decode(chunk);
+					targetElement.textContent += decoder.decode(chunk);
 				}
 				
 				if (askForCode) {
