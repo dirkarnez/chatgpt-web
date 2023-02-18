@@ -199,7 +199,7 @@
 				const decoder = new TextDecoder();
 
 				for await (const chunk of data) {
-					document.getElementById("ans").innerText += decoder.decode(chunk);
+					document.getElementById("ans").textContent += decoder.decode(chunk);
 				}
 				
 				document.querySelectorAll('pre code').forEach((el) => {
