@@ -201,7 +201,9 @@
 					document.getElementById("ans").innerText += decoder.decode(chunk);
 				}
 				
-				hljs.highlightAll();
+				document.querySelectorAll('pre code').forEach((el) => {
+				    hljs.highlightElement(el);
+				});
 			});
 		}
 		
