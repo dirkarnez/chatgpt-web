@@ -82,10 +82,7 @@
 			<div style="width: 100%;">		
 				<textarea id="ask-textarea"></textarea>
 				<button onclick="handleClick()">Ask</button><br>
-				<div id="ans-container">
-					<pre><code id="ans-code"></code></pre>
-					<div id="ans-text"></div>
-				</div>
+				<div id="ans-container"></div>
 				<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">	
 			</div>
 		</div>
@@ -184,6 +181,9 @@
 		}
 
 		function handleClick(askForCode) {
+			const container = document.getElementById("ans-container");
+			container.innerHTML = "";
+			
 			OpenAIStream().then(async response => {
 				const data = response.body;
 				if (!data) {
@@ -198,8 +198,15 @@
 				
 				const detection = hljs.highlightAuto(code, ["cpp"]);
 				if (!!detection.language) {
-					const targetElement = document.getElementById("ans-code");
-					targetElement.innerHTML = detection.value;
+					const pre = document.createElement("pre");
+					const code = document.createElement("code");
+					code.className = "hljs";
+					code.innerHTML = detection.value;
+					
+					pre.appendChild(code);
+					container.appendChild(pre);
+				} else {
+					container.innerHTML = detection.value;
 				}
 			});
 		}
