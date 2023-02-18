@@ -74,7 +74,7 @@
 			bottom: 0px;
 		}
 		
-		#ans {
+		#ans-container {
 			white-space: pre-wrap;
 			white-space: -moz-pre-wrap;
 			white-space: -o-pre-wrap;
@@ -89,7 +89,7 @@
 			<div style="width: 100%;">		
 				<textarea id="ask-textarea"></textarea>
 				<button onclick="handleClick()">Ask</button><br>
-				<pre><code id="ans"></code></pre>
+				<pre id="ans-container"><code id="ans"></code></pre>
 				<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
 			</div>
 		</div>
