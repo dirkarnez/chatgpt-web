@@ -196,7 +196,7 @@
 					code += decoder.decode(chunk);
 				}
 				
-				const detection = hljs.highlightAuto(code, ["cpp"]);
+				const detection = hljs.highlightAuto(code, ["bash", "arduino", "c", "cpp", "typescript", "swift", "javascript", "lisp", "latex", "kotlin", "julia", "json", "java", "graphql", "go", "glsl", "erlang", "dockerfile", "dns", "diff", "dart", "csharp", "cmake", "sql", "shell", "rust", "python", "protobuf", "prolog", "processing", "php", "plaintext", "matlab", "mathematica", "markdown", "makefile", "lua"]);
 				if (!!detection.language) {
 					const pre = document.createElement("pre");
 					const code = document.createElement("code");
