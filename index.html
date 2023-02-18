@@ -199,7 +199,7 @@
 				const detection = hljs.highlightAuto(code, ["cpp"]);
 				if (!!detection.language) {
 					const targetElement = document.getElementById("ans-code");
-					targetElement.textContent = detection.value;
+					targetElement.innerHTML = detection.value;
 				}
 			});
 		}
