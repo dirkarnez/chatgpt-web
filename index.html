@@ -89,8 +89,10 @@
 		<div class="row my-container">
 			<div style="width: 100%;">		
 				<textarea id="ask-textarea"></textarea>
-				<button onclick="handleClick()">Ask</button><br>
-				<pre id="ans-container"><code id="ans"></code></pre>
+				<button onclick="handleClick(false)">Ask (text)</button><br>
+				<button onclick="handleClick(true)">Ask (code)</button><br>
+				<pre id="ans-container"><code id="ans-code"></code></pre>
+				<div id="ans-text"></div>
 				<input type="text" id="key" oninput="Cookies.set(window.key, event.target.value)">
 			</div>
 		</div>
@@ -188,8 +190,9 @@
 			return new Response(stream);
 		}
 
-		function handleClick() {
-			document.getElementById("ans").innerText = "";
+		function handleClick(askForCode) {
+			const targetElement = document.getElementById(askForCode ? "ans-code" : "ans-text");
+			targetElement.innerText = "";
 			
 			OpenAIStream().then(async response => {
 				const data = response.body;
@@ -202,9 +205,11 @@
 					document.getElementById("ans").textContent += decoder.decode(chunk);
 				}
 				
-				document.querySelectorAll('pre code').forEach((el) => {
-				    hljs.highlightElement(el);
-				});
+				if (askForCode) {
+					document.querySelectorAll('pre code').forEach((el) => {
+					    hljs.highlightElement(el);
+					});
+				}
 			});
 		}
 		
